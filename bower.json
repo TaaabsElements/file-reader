@@ -1,0 +1,29 @@
+{
+  "name": "file-reader",
+  "version": "1.0.0",
+  "description": "A graphical element that simplify file reading.",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "taaabs"
+  ],
+  "authors": [
+    "Rémi Casado"
+  ],
+//  "repository": {
+//    "type": "git",
+//    "url": "git://github.com/PolymerElements/iron-a11y-announcer.git"
+//  },
+  "main": "file-reader.html",
+//  "license": "http://polymer.github.io/LICENSE.txt",
+  "dependencies": {
+    "polymer": "polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "paper-button": "polymerelements/paper-button#^1.0.0",
+    "paper-card": "polymerelements/paper-card#^1.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "ignore": []
+}

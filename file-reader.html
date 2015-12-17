@@ -1,0 +1,315 @@
+<!--
+
+@Author: Rémi Casado
+
+Inspirations : 
+  - http://www.html5rocks.com/en/tutorials/file/dndfiles/
+Colors :
+  - http://www.flatuicolorpicker.com/
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="file-reader">
+  <template>
+    <style>
+      :host{
+        display: block;
+        text-align:center;
+      }
+      #dropzone{
+        position:relative;
+        padding:10px;
+        background: repeating-linear-gradient(
+          -45deg,
+          #ECF0F1, /*PORCELAIN*/
+          #ECF0F1 10px,
+          #ececec 10px, /*WHITE SMOKE */
+          #ececec 20px
+        );
+        border: dashed 1px gray;
+      }
+      #files{
+        display:none
+      }
+      #NotSupportedCard{
+        color: red;
+        border-color:red;
+        border-style: solid;
+        border-width: 2px;
+      }
+      #uploadbutton {
+        background: #4183D7; /*ROYAL BLUE*/
+        color: white;
+        margin-bottom:8px;
+      }
+      #uploadbutton:hover {
+        background: #6BB9F0; /* MALIBU */
+      }
+    </style>
+    
+    <!--  
+      * Message displayed if the web browser doesn't support the File API.
+      * @param fileApiSupported Set into ready function.
+    -->
+    <div hidden$="{{fileApiSupported}}">
+      <paper-card id="NotSupportedCard">
+          <div class="card-content">
+            <p>Your current browser does not support the W3C File API.</p>
+          </div>
+      </paper-card>
+    </div>
+    
+    <!-- Content displayed if the web browser support the File API -->
+    <div hidden$="{{!fileApiSupported}}">
+      <div id="dropzone">  
+        <center>
+          <paper-button id="uploadbutton" raised />Upload</paper-button>
+        </center>   
+        <input type="file" id="files" name="files[]" multiple />
+        <center> 
+          <p>Or drop your file here.</p>
+        </center>  
+      </div>
+    </div>
+  </template>
+
+  <script>
+      /* global Polymer */
+      
+/**
+`<file-reader>` is a graphical element that upload a file, via button or drag&drop, and read it as a text-file when asked to.
+
+Example:
+
+    <file-reader id="filereaderElem"></file-reader>
+    <script>
+      (function() {
+        var reader = document.getElementById('filereaderElem');
+        reader.returnFunction = function(){
+          var callback = {
+            onload: function(e){ console.log(e.target.result); },
+            onprogress: function(){},
+            onerror: function(){}  
+          }  
+          reader.getSample(0,callback);
+        }
+      })();
+    <script>  
+ 
+@demo demo/index.html    
+*/
+      Polymer({
+        is: 'file-reader',
+        
+        listeners: {
+          'files.change': '_handleFileSelect',
+          'dropzone.dragover': '_handleFileDrag',
+          'dropzone.drop': '_handleFileDrop',
+          'uploadbutton.click': '_handleUploadClick'
+        },
+        
+        properties: {
+        
+          /**
+          * The list of files retrieved via the input `#file`.
+          *
+          * @attribute files
+          * @type Array
+          */
+          files: {
+            type: Array,
+            notify: true,
+            value : function(){
+              return [];
+            }
+          },
+        
+          /**
+          * The first file retrieved via the input `#file`.
+          *
+          * @attribute file
+          * @type Object
+          */
+          file: {
+            type: Object,
+            notify: true
+          },
+          
+          /**
+          * Boolean set to true if the current web browser support the File API.
+          *
+          * @attribute fileApiSupported
+          * @type Boolean
+          */
+          fileApiSupported:{
+            type: Boolean,
+            notify: true,
+            value: false
+          },
+          
+          /**
+          * Default value of the length of a "slice" of the file, in byte. 
+          *
+          * @attribute fileSliceSize
+          * @type Number
+          */
+          fileSliceSize: {
+            type: Number,
+            notify: true,
+            value: 1000000
+          }
+        },
+        
+        ready: function() {
+          // Check if the File API is supported
+          if( window.File && window.FileReader && window.FileList && window.Blob )
+            this.fileApiSupported = true;
+        },
+        
+        /**
+        *Read a small part of the 'file' ( Default : 10,000 bytes ).
+        *
+        *Returns several functions:
+        *
+        * - Returns the FileReader.onprogress onto callback.onprogress.
+        * - Returns the FileReader.onload onto callback.onload.
+        * - Returns the FileReader.onerror onto callback.onerror.
+        *
+        *See also: [FileReader API](https://developer.mozilla.org/en-US/docs/Web/API/FileReader).
+        *
+        *@method getSample
+        *
+        *@param {!required} fileIndex The index of the file you wants to slice.
+        *@param {!required} callback The return functions object.
+        */
+        getSample: function(fileIndex, callback){
+          var slice = this.files[fileIndex].slice(0, 10000);
+
+          var reader = new FileReader();
+          reader.readAsText(slice, "ISO-8859-1");
+          reader.onprogress = callback.onprogress;
+          reader.onload = callback.onload;
+          reader.onerror = callback.onerror;
+        },
+        
+        /**
+        *Read a slice of the 'file'. The slice will be 'fileSliceSize' long (default : 1,000,000 bytes).
+        *
+        *For example, for a 3MB file, there will be 3 slices:
+        *
+        *| index : 1 | index : 2 |index : 3 |
+        *|---|---|---|
+        *| 1,000,000 bytes | 1,000,000 bytes | 1,000,000 bytes |
+        *
+        *Returns several functions:
+        *
+        * - Returns the FileReader.onprogress onto callback.onprogress.
+        * - Returns the FileReader.onload onto callback.onload.
+        * - Returns the FileReader.onerror onto callback.onerror.
+        *
+        *See also: [FileReader API](https://developer.mozilla.org/en-US/docs/Web/API/FileReader).
+        *
+        *@method getSlice
+        *
+        *@param {!required} filesIndex The index of the file you wants to slice.
+        *@param {!required} sliceIndex The index of the slice.
+        *@param {!required} callback The return functions object.
+        *
+        */
+        getSlice: function(filesIndex, sliceIndex, callback){
+          var slice = this.files[filesIndex].slice((sliceIndex-1)*this.fileSliceSize, sliceIndex*this.fileSliceSize);
+
+          var reader = new FileReader();
+          reader.readAsText(slice, "ISO-8859-1");
+          reader.onprogress = callback.onprogress || function(){};
+          reader.onload = callback.onload || function(){};
+          reader.onerror = callback.onerror || function(){};
+
+        },
+        
+        /**
+        *Return the number of sices.
+        *
+        *@method getSlices
+        *
+        *@param {!required} fileIndex The index of the file you wants to slice.
+        *
+        */
+        getSlices: function(fileIndex){
+          return Math.floor( this.files[fileIndex].size / this.fileSliceSize ) + 1; 
+        },
+
+        /**
+        *Triggered when a file is drag over the dropZone.
+        *
+        *@method _handleFileDrag
+        *
+        *@param {!required} evt Drag event.
+        *
+        */
+        _handleFileDrag: function(evt){
+          evt.stopPropagation();
+          evt.preventDefault();
+          evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+        },
+        
+        /**
+        * Triggered when a file is dropped.
+        *
+        *@method _handleFileDrop
+        *
+        *@param {!required} evt Drop event.
+        *
+        */
+        _handleFileDrop: function(evt){
+          evt.stopPropagation();
+          evt.preventDefault();
+      
+          var files = evt.dataTransfer.files;
+          for(var i = 0; i < files.length; i++){
+            this.push('files',files[i]);
+          }
+        },
+        
+        /**
+        * Triggered when a file is dropped or selected.
+        *
+        *@method _handleFileSelect
+        *
+        *@param {!required} evt Click event.
+        *
+        */
+        _handleFileSelect: function(evt){
+          var files = evt.target.files;
+          // If there's at least one file.
+          for(var i = 0; i < files.length; i++){
+            this.push('files',files[i]);
+          }
+          this.returnFunction();
+        },
+        
+        /**
+        * Trigger the input-file click.
+        *
+        *@method _handleUploadClick
+        *
+        *@param {!required} evt Click event.
+        *
+        */
+        _handleUploadClick: function(evt){
+          this.$.files.click();
+        },
+        
+        /**
+        * Triggered when the user has selected one or several filesk.
+        *
+        *@method returnFunction
+        */
+        returnFunction(){
+          console.log('loading finished');
+        }
+    });
+  </script>
+
+</dom-module>
