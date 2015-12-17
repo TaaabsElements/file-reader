@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       reader.returnFunction = function(){
         var callback = {
           onload: function(e){
-            contentDiv.innerHTML = e.target.result ;
+            contentDiv.textContent = e.target.result ;
           },
           onprogress: function(){},
           onerror: function(){}  
