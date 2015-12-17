@@ -10,12 +10,12 @@
   "authors": [
     "Rémi Casado"
   ],
-//  "repository": {
-//    "type": "git",
-//    "url": "git://github.com/PolymerElements/iron-a11y-announcer.git"
-//  },
+  "repository": {
+   "type": "git",
+   "url": "https://github.com/TaaabsElements/file-reader.git"
+  },
   "main": "file-reader.html",
-//  "license": "http://polymer.github.io/LICENSE.txt",
+  "license": "https://github.com/TaaabsElements/file-reader/LICENSE",
   "dependencies": {
     "polymer": "polymer/polymer#^1.0.0"
   },
