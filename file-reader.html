@@ -2,7 +2,7 @@
 
 @Author: Rémi Casado
 
-Inspirations : 
+Inspirations :
   - http://www.html5rocks.com/en/tutorials/file/dndfiles/
 Colors :
   - http://www.flatuicolorpicker.com/
@@ -47,8 +47,8 @@ Colors :
         background: #6BB9F0; /* MALIBU */
       }
     </style>
-    
-    <!--  
+
+    <!--
       * Message displayed if the web browser doesn't support the File API.
       * @param fileApiSupported Set into ready function.
     -->
@@ -59,24 +59,24 @@ Colors :
           </div>
       </paper-card>
     </div>
-    
+
     <!-- Content displayed if the web browser support the File API -->
     <div hidden$="{{!fileApiSupported}}">
-      <div id="dropzone">  
+      <div id="dropzone">
         <center>
           <paper-button id="uploadbutton" raised />Upload</paper-button>
-        </center>   
+        </center>
         <input type="file" id="files" name="files[]" multiple />
-        <center> 
+        <center>
           <p>Or drop your file here.</p>
-        </center>  
+        </center>
       </div>
     </div>
   </template>
 
   <script>
       /* global Polymer */
-      
+
 /**
 `<file-reader>` is a graphical element that upload a file, via button or drag&drop, and read it as a text-file when asked to.
 
@@ -90,29 +90,29 @@ Example:
           var callback = {
             onload: function(e){ console.log(e.target.result); },
             onprogress: function(){},
-            onerror: function(){}  
-          }  
+            onerror: function(){}
+          }
           reader.getSample(0,callback);
         }
       })();
-    <script>  
- 
+    <script>
+
 Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_blank">file-reader</a>
- 
+
 @demo demo/index.html
 */
       Polymer({
         is: 'file-reader',
-        
+
         listeners: {
           'files.change': '_handleFileSelect',
           'dropzone.dragover': '_handleFileDrag',
           'dropzone.drop': '_handleFileDrop',
           'uploadbutton.click': '_handleUploadClick'
         },
-        
+
         properties: {
-        
+
           /**
           * The list of files retrieved via the input `#file`.
           *
@@ -126,7 +126,7 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
               return [];
             }
           },
-        
+
           /**
           * The first file retrieved via the input `#file`.
           *
@@ -137,7 +137,7 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
             type: Object,
             notify: true
           },
-          
+
           /**
           * Boolean set to true if the current web browser support the File API.
           *
@@ -149,9 +149,9 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
             notify: true,
             value: false
           },
-          
+
           /**
-          * Default value of the length of a "slice" of the file, in byte. 
+          * Default value of the length of a "slice" of the file, in byte.
           *
           * @attribute fileSliceSize
           * @type Number
@@ -162,13 +162,13 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
             value: 1000000
           }
         },
-        
+
         ready: function() {
           // Check if the File API is supported
           if( window.File && window.FileReader && window.FileList && window.Blob )
             this.fileApiSupported = true;
         },
-        
+
         /**
         *Read a small part of the 'file' ( Default : 10,000 bytes ).
         *
@@ -194,7 +194,7 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
           reader.onload = callback.onload;
           reader.onerror = callback.onerror;
         },
-        
+
         /**
         *Read a slice of the 'file'. The slice will be 'fileSliceSize' long (default : 1,000,000 bytes).
         *
@@ -229,7 +229,7 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
           reader.onerror = callback.onerror || function(){};
 
         },
-        
+
         /**
         *Return the number of sices.
         *
@@ -239,7 +239,7 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
         *
         */
         getSlices: function(fileIndex){
-          return Math.floor( this.files[fileIndex].size / this.fileSliceSize ) + 1; 
+          return Math.floor( this.files[fileIndex].size / this.fileSliceSize ) + 1;
         },
 
         /**
@@ -255,7 +255,7 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
           evt.preventDefault();
           evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
         },
-        
+
         /**
         * Triggered when a file is dropped.
         *
@@ -267,13 +267,15 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
         _handleFileDrop: function(evt){
           evt.stopPropagation();
           evt.preventDefault();
-      
+
+          this.set('files', []);
+
           var files = evt.dataTransfer.files;
           for(var i = 0; i < files.length; i++){
             this.push('files',files[i]);
           }
         },
-        
+
         /**
         * Triggered when a file is dropped or selected.
         *
@@ -284,13 +286,16 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
         */
         _handleFileSelect: function(evt){
           var files = evt.target.files;
+
+          this.set('files', []);
+
           // If there's at least one file.
           for(var i = 0; i < files.length; i++){
             this.push('files',files[i]);
           }
           this.returnFunction();
         },
-        
+
         /**
         * Trigger the input-file click.
         *
@@ -302,7 +307,7 @@ Source files: <a href="https://github.com/TaaabsElements/file-reader" target="_b
         _handleUploadClick: function(evt){
           this.$.files.click();
         },
-        
+
         /**
         * Triggered when the user has selected one or several filesk.
         *
