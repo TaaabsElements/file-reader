@@ -17,14 +17,19 @@
   "main": "file-reader.html",
   "license": "https://github.com/TaaabsElements/file-reader/LICENSE",
   "dependencies": {
-    "polymer": "polymer/polymer#^1.0.0",
-    "paper-button": "polymerelements/paper-button#^1.0.0",
-    "paper-card": "polymerelements/paper-card#^1.0.0"
+    "polymer": "polymer/polymer",
+    "paper-button": "PolymerElements/paper-button",
+    "iron-icon": "PolymerElements/iron-icon",
+    "iron-icons": "PolymerElements/iron-icons",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior",
+    "notify-toast-behavior": "Yepikae/notify-toast-behavior",
+    "taaabs-themes": "TaaabsElements/taaabs-themes"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
-    "paper-button": "polymerelements/paper-button#^1.0.0",
-    "paper-card": "polymerelements/paper-card#^1.0.0",
+    "paper-button": "polymerelements/paper-button",
+    "iron-icon": "polymerelements/iron-icon",
+    "iron-icons": "polymerelements/iron-icons",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
   "ignore": []

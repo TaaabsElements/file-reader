@@ -1,0 +1,12 @@
+{
+    "en": {
+      "upload": "Upload",
+      "drop": "Or drop your files here",
+      "error-msg": "Oooops! It seems your navigator does not support <a href=\"https://developer.mozilla.org/fr/docs/Web/API/File\" target=\"_blank\">File API</a>"
+    },
+    "fr": {
+      "upload": "Téléverser",
+      "drop": "Ou glissez vos fichiers ici",
+      "error-msg": "Oooops! Il semblerait que votre navigateur ne supporte pas l'<a href=\"https://developer.mozilla.org/fr/docs/Web/API/File\" target=\"_blank\">API File</a>"
+    }
+}
