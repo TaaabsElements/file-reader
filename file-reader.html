@@ -16,7 +16,6 @@ Colors :
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 
-
 <dom-module id="file-reader">
   <template>
     <style include="taaabs-theme"></style>
@@ -394,6 +393,7 @@ Colors :
         for (var i = 0; i < files.length; i++) {
           this.push('files', files[i]);
         }
+        this.fire('files-selected');
       },
 
       /**
@@ -413,7 +413,7 @@ Colors :
         for (var i = 0; i < files.length; i++) {
           this.push('files', files[i]);
         }
-        this.returnFunction();
+        this.fire('files-selected');
       },
 
       /**
@@ -426,15 +426,6 @@ Colors :
        */
       _handleUploadClick: function(evt) {
         this.$.files.click();
-      },
-
-      /**
-       * Triggered when the user has selected one or several filesk.
-       *
-       *@method returnFunction
-       */
-      returnFunction() {
-        console.log('loading finished');
       }
     });
   </script>
