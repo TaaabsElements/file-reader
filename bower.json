@@ -17,11 +17,11 @@
   "main": "file-reader.html",
   "license": "https://github.com/TaaabsElements/file-reader/LICENSE",
   "dependencies": {
-    "polymer": "polymer/polymer",
-    "paper-button": "PolymerElements/paper-button",
-    "iron-icon": "PolymerElements/iron-icon",
-    "iron-icons": "PolymerElements/iron-icons",
-    "app-localize-behavior": "PolymerElements/app-localize-behavior",
+    "polymer": "Polymer/polymer#<2.*",
+    "paper-button": "PolymerElements/paper-button#<2.*",
+    "iron-icon": "PolymerElements/iron-icon#<2.*",
+    "iron-icons": "PolymerElements/iron-icons#<2.*",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior#<2.*",
     "notify-toast-behavior": "Yepikae/notify-toast-behavior",
     "taaabs-themes": "TaaabsElements/taaabs-themes"
   },
